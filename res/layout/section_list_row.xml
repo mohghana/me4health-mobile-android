@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/section_row"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="40dp"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/section_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingBottom="5dp"
+        android:textColor="@color/apptheme_color"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <org.digitalcampus.oppia.utils.TwoWayView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/section_activities"
+        style="@style/TwoWayView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:drawSelectorOnTop="false"
+        tools:context=".CourseIndexActivity"
+        android:listSelector="@drawable/background_change_pressed"
+        android:cacheColorHint="#00000000" />
+
+</LinearLayout>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="left"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_form_status" />
+
+            <org.digitalcampus.oppia.utils.MaterialSpinner
+                android:id="@+id/register_form_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/form_register_status_list"
+                app:ms_baseColor="@color/spinner_base_color"
+                app:ms_hint="Select"
+                app:ms_multiline="false" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/register_form_username_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_form_username_title"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/register_form_username_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/register_form_email_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_form_email_title" />
+
+        <EditText
+            android:id="@+id/register_form_email_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/register_form_password_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_form_password_title" />
+
+        <EditText
+            android:id="@+id/register_form_password_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/register_form_password_again_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_form_password_again_title" />
+
+        <EditText
+            android:id="@+id/register_form_password_again_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/register_form_firstname_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_form_firstname_title" />
+
+        <EditText
+            android:id="@+id/register_form_firstname_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/register_form_lastname_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_form_lastname_title" />
+
+        <EditText
+            android:id="@+id/register_form_lastname_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+        
+        <TextView
+            android:id="@+id/register_form_gender"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Gender(*)" />
+
+        <org.digitalcampus.oppia.utils.MaterialSpinner
+                android:id="@+id/register_form_gender_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/form_register_gender_list"
+                app:ms_baseColor="@color/spinner_base_color"
+                app:ms_hint="Select"
+                app:ms_multiline="false" />
+
+        <TextView
+            android:id="@+id/register_form_phoneno_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_form_phoneno_title" />
+
+        <EditText
+            android:id="@+id/register_form_phoneno_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone" />
+
+        <LinearLayout
+            android:id="@+id/non_guest_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/linearlayout_schoolcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="School Code(*)"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <EditText
+                    android:id="@+id/register_form_schoolcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearlayout_yeargroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_form_yeargroup" />
+
+                <org.digitalcampus.oppia.utils.MaterialSpinner
+                    android:id="@+id/register_form_yeargroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/form_register_yeargroup_list"
+                    app:ms_baseColor="@color/spinner_base_color"
+                    app:ms_hint="Select"
+                    app:ms_multiline="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearlayout_program"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_form_program" />
+
+                <org.digitalcampus.oppia.utils.MaterialSpinner
+                    android:id="@+id/register_form_program"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/form_register_program_list"
+                    app:ms_baseColor="@color/spinner_base_color"
+                    app:ms_hint="Select"
+                    app:ms_multiline="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearlayout_region"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_form_hometown" />
+
+                <org.digitalcampus.oppia.utils.MaterialSpinner
+                    android:id="@+id/register_form_hometown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/form_register_hometown_list"
+                    app:ms_baseColor="@color/spinner_base_color"
+                    app:ms_hint="Select"
+                    app:ms_multiline="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearlayout_job_org"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/register_form_jobtitle_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_form_jobtitle_title"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/register_form_jobtitle_field"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:visibility="gone" >
+
+                    <requestFocus />
+                </EditText>
+
+                <TextView
+                    android:id="@+id/register_form_organisation_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_form_organisation_title"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/register_form_organisation_field"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/register_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_btn_text" />
+    </LinearLayout>
+
+</ScrollView>

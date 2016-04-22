@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ME4Health</string>
+  <!--  <string name="prefServerDefault">https://demo.oppia-mobile.org/</string> -->
+  <string name="prefServerDefault">http://166.62.88.176/oppia/</string>
+    <string name="prefServerTimeoutConnectionDefault">60000</string>
+    <string name="prefServerTimeoutResponseDefault">60000</string>
+    
+</resources>

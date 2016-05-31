@@ -81,6 +81,8 @@ public class UpdateProfileActivity extends AppActivity implements OnSharedPrefer
 			phoneNo2Field.setText(userInfo.get(0).getPhoneNo2());
 			phoneNo3Field.setText(userInfo.get(0).getPhoneNo3());
 			schoolCodeField.setText(userInfo.get(0).getSchoolCode());
+			
+			
 		}
 		statusField.setOnItemSelectedListener(new OnItemSelectedListener() {
 

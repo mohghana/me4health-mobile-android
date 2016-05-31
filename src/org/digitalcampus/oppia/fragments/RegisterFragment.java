@@ -18,6 +18,7 @@
 package org.digitalcampus.oppia.fragments;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.digitalcampus.mobile.learningJHPIEGO.R;
 import org.digitalcampus.oppia.activity.BaseLineSurveyActivity;
@@ -150,7 +151,7 @@ public class RegisterFragment extends Fragment implements SubmitListener {
 					program_field.setVisibility(View.GONE);
 				}else if(statusField.getSelectedItem().toString().equals("Tutor")){
 					region_field.setVisibility(View.GONE);
-					yeargroup_field.setVisibility(View.VISIBLE);
+					yeargroup_field.setVisibility(View.GONE);
 					schoolcode_field.setVisibility(View.VISIBLE);
 					program_field.setVisibility(View.GONE);
 				}else if(statusField.getSelectedItem().toString().equals("Student")){
@@ -226,15 +227,17 @@ public class RegisterFragment extends Fragment implements SubmitListener {
 			 hometown=(String) hometownField.getSelectedItem().toString();
 			 schoolCode=(String) "-----";
 		}else if(statusField.getSelectedItem().toString().equals("Tutor")){
-			 yeargroup=(String) yeargroupField.getSelectedItem().toString();
+			 yeargroup=(String) "-----";
 			 program=(String) "-----";
 			 hometown=(String) "-----";
 			 schoolCode=(String) schoolCodeField.getText().toString();
+			 schoolCode.toUpperCase(Locale.ENGLISH);
 		}else{
 			 yeargroup=(String) yeargroupField.getSelectedItem().toString();
 			 program=(String) programField.getSelectedItem().toString();
 			 hometown=(String) "-----";
 			 schoolCode=(String) schoolCodeField.getText().toString();
+			 schoolCode.toUpperCase(Locale.ENGLISH);
 		}
 		// do validation
 		// check username
@@ -242,6 +245,9 @@ public class RegisterFragment extends Fragment implements SubmitListener {
 			UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_username);
 			return;
 		}*/
+		if(statusField.getSelectedItem().equals("")){
+			UIUtils.showAlert(super.getActivity(), R.string.error, "Please select a status to proceed");
+		}
 		
 		if (username.contains(" ")) {
 			UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_username_spaces);
@@ -282,45 +288,49 @@ public class RegisterFragment extends Fragment implements SubmitListener {
 			UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_lastname);
 			return;
 		}
-
+		if(genderField.getSelectedItem().equals("")){
+			UIUtils.showAlert(super.getActivity(),R.string.error,"Select a gender");
+		}
 		// check phone no
 		if (phoneNo.length() < 8) {
 			UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_phoneno);
 			return;
 		}
-		if(!Validation.hasSelection(genderField)){
-			UIUtils.showAlert(super.getActivity(),R.string.error,"Select a gender");
+		
+		if(statusField.getSelectedItem().equals("")){
+			UIUtils.showAlert(super.getActivity(), R.string.error, "Please select a status to proceed");
 		}
 		if(statusField.getSelectedItem().equals("Guest")){
 			
-			if(!Validation.hasSelection(hometownField)){
+			if(hometownField.getSelectedItem().equals("")){
 				UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_hometown);
 			}
-			if(!Validation.hasSelection(statusField)){
+			if(statusField.getSelectedItem().equals("")){
 				UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_status);
 			}
 		}
 		if(statusField.getSelectedItem().equals("Student")){
-			if(!Validation.hasSelection(yeargroupField)){
+			if(yeargroupField.getSelectedItem().equals("")){
 				UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_yeargroup);
 			}
 			
-			if(!Validation.hasSelection(programField)){
+			if(programField.getSelectedItem().equals("")){
 				UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_program);
 			}
-			if(!Validation.hasSelection(statusField)){
+			if(statusField.getSelectedItem().equals("")){
 				UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_status);
 			}
 		}
 		if(statusField.getSelectedItem().equals("Tutor")){
-			if(!Validation.hasSelection(yeargroupField)){
+			/*if(yeargroupField.getSelectedItem().equals("")){
 				UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_yeargroup);
-			}
+			}*/
 			
-			if(!Validation.hasSelection(statusField)){
+			if(statusField.getSelectedItem().equals("")){
 				UIUtils.showAlert(super.getActivity(),R.string.error,R.string.error_register_no_status);
 			}
 		}
+		
 		pDialog = new ProgressDialog(super.getActivity());
 		pDialog.setTitle(R.string.register_alert_title);
 		pDialog.setMessage(getString(R.string.register_process));

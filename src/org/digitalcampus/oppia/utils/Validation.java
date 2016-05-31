@@ -33,7 +33,7 @@ public class Validation {
 	        spinner.setError(null);;
 	 
 	        // length 0 means there is no text
-	        if (text.equalsIgnoreCase("Select")) {
+	        if (text.equalsIgnoreCase("")) {
 	            //spinner.setError(REQUIRED_MSG);
 	            return false;
 	        }

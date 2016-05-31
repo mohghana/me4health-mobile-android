@@ -39,6 +39,7 @@ import org.digitalcampus.oppia.listener.SubmitListener;
 import org.digitalcampus.oppia.model.User;
 import org.digitalcampus.oppia.utils.HTTPConnectionUtils;
 import org.digitalcampus.oppia.utils.MetaDataUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -115,6 +116,16 @@ public class LoginTask extends AsyncTask<Payload, Object, Payload> {
 					u.setPasswordEncrypted();
 					u.setFirstname(jsonResp.getString("first_name"));
 					u.setLastname(jsonResp.getString("last_name"));
+					JSONArray sc=new JSONArray(jsonResp.getString("school_code"));
+					u.setSchoolCode(sc.getJSONObject(0).getString("school_code"));
+					JSONArray yg=new JSONArray(jsonResp.getString("year_group"));
+					u.setYeargroup(yg.getJSONObject(0).getString("year_group"));
+					JSONArray st=new JSONArray(jsonResp.getString("status"));
+					u.setStatus(st.getJSONObject(0).getString("status"));
+					JSONArray p=new JSONArray(jsonResp.getString("program"));
+					u.setProgram(p.getJSONObject(0).getString("program"));
+					JSONArray ht=new JSONArray(jsonResp.getString("home_town"));
+					u.setHometown(ht.getJSONObject(0).getString("home_town"));
 					try {
 						u.setPoints(jsonResp.getInt("points"));
 						u.setBadges(jsonResp.getInt("badges"));

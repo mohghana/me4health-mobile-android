@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:entries="@array/form_register_status_list"
             app:ms_baseColor="@color/spinner_base_color"
-            app:ms_hint="Select"
+            app:ms_hint=""
             app:ms_multiline="false" />
 
         <LinearLayout
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:entries="@array/form_register_yeargroup_list"
                 app:ms_baseColor="@color/spinner_base_color"
-                app:ms_hint="Select"
+                app:ms_hint=""
                 app:ms_multiline="false" />
 
             <TextView
@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:entries="@array/form_register_program_list"
                 app:ms_baseColor="@color/spinner_base_color"
-                app:ms_hint="Select"
+                app:ms_hint=""
                 app:ms_multiline="false" />
 
             <TextView
@@ -180,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:entries="@array/form_register_hometown_list"
                 app:ms_baseColor="@color/spinner_base_color"
-                app:ms_hint="Select"
+                app:ms_hint=""
                 app:ms_multiline="false" />
 
             <TextView

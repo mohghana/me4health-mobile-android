@@ -60,10 +60,13 @@ public class BaseLineSurveyActivity extends AppActivity implements OnSharedPrefe
 			@Override
 			public void onClick(View v) {
 				pDialog = new ProgressDialog(BaseLineSurveyActivity.this);
-				pDialog.setIndeterminate(false);
+				//pDialog.setTitle("Submitting....");
+				pDialog.setProgressStyle(android.R.style.Widget_DeviceDefault_Light_ProgressBar_Horizontal);
+				//pDialog.setIndeterminate(false);
 				pDialog.setTitle("Baseline Survey");
 				pDialog.setMessage("Submitting....");
-				pDialog.setCancelable(true);
+				
+				pDialog.setCancelable(false);
 				pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Close", new DialogInterface.OnClickListener() {
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
@@ -105,8 +108,9 @@ public class BaseLineSurveyActivity extends AppActivity implements OnSharedPrefe
 	@SuppressWarnings("deprecation")
 	@Override
 	public void submitComplete(Payload response) {
-		pDialog.setIndeterminate(false);
-		pDialog.setMessage("Survey submitted successfully");
+		pDialog.setTitle("Thank you!");
+		//pDialog.setIndeterminate(false);
+		pDialog.setMessage("Thank you for your feedback. ");
 		pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Close", new DialogInterface.OnClickListener() {
 		    @Override
 		    public void onClick(DialogInterface dialog, int which) {

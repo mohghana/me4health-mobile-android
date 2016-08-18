@@ -35,11 +35,13 @@ import org.digitalcampus.oppia.application.DbHelper;
 import org.digitalcampus.oppia.application.MobileLearning;
 import org.digitalcampus.oppia.listener.InstallCourseListener;
 import org.digitalcampus.oppia.listener.PostInstallListener;
+import org.digitalcampus.oppia.listener.SubmitListener;
 import org.digitalcampus.oppia.listener.UpgradeListener;
 import org.digitalcampus.oppia.model.DownloadProgress;
 import org.digitalcampus.oppia.model.User;
 import org.digitalcampus.oppia.task.InstallDownloadedCoursesTask;
 import org.digitalcampus.oppia.task.Payload;
+import org.digitalcampus.oppia.task.PhoneIMEISubmitTask;
 import org.digitalcampus.oppia.task.PostInstallTask;
 import org.digitalcampus.oppia.task.UpgradeManagerTask;
 import org.digitalcampus.oppia.utils.storage.FileUtils;
@@ -47,7 +49,7 @@ import org.digitalcampus.oppia.utils.storage.FileUtils;
 import java.io.File;
 import java.util.ArrayList;
 
-public class StartUpActivity extends Activity implements UpgradeListener, PostInstallListener, InstallCourseListener{
+public class StartUpActivity extends Activity implements UpgradeListener, PostInstallListener, InstallCourseListener, SubmitListener{
 
 	public final static String TAG = StartUpActivity.class.getSimpleName();
 	private TextView tvProgress;
@@ -61,10 +63,7 @@ public class StartUpActivity extends Activity implements UpgradeListener, PostIn
         super.onCreate(savedInstanceState);
         Mint.disableNetworkMonitoring();
         Mint.initAndStartSession(this, MobileLearning.MINT_API_KEY);
-        
         setContentView(R.layout.start_up);
-       
-		
         tvProgress = (TextView) this.findViewById(R.id.start_up_progress);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Mint.setUserIdentifier(prefs.getString(PrefsActivity.PREF_USER_NAME, "anon"));
@@ -77,10 +76,16 @@ public class StartUpActivity extends Activity implements UpgradeListener, PostIn
 		ArrayList<Object> data = new ArrayList<Object>();
  		Payload p = new Payload(data);
 		umt.execute(p);
+		try{
+		PhoneIMEISubmitTask pit=new PhoneIMEISubmitTask(this);
+		pit.setImeiSubmitListener(this);
+		pit.execute(p);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	
  		
 	}
-	
-	
     private void updateProgress(String text){
     	if(tvProgress != null){
     		tvProgress.setText(text);
@@ -198,5 +203,10 @@ public class StartUpActivity extends Activity implements UpgradeListener, PostIn
 
 	public void installProgressUpdate(DownloadProgress dp) {
 		this.updateProgress(dp.getMessage());
+	}
+	@Override
+	public void submitComplete(Payload response) {
+		updateProgress("IMEI added");
+		
 	}
 }

@@ -181,7 +181,7 @@ public class TrackerService extends Service implements APIRequestListener {
 					MobileLearning.APP_LOGO);
 			NotificationCompat.Builder mBuilder =
 				    new NotificationCompat.Builder(this)
-				    .setSmallIcon(R.drawable.ic_stat_notification)
+				    .setSmallIcon(R.drawable.ic_launcher)
 				    .setLargeIcon(icon)
 				    .setContentTitle(getString(R.string.notification_course_update_title))
 				    .setContentText(getString(R.string.notification_course_update_text));

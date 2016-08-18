@@ -489,6 +489,7 @@ public class DbHelper extends SQLiteOpenHelper {
 			values.put(ACTIVITY_C_ACTTYPE, a.getActType());
 			values.put(ACTIVITY_C_ACTIVITYDIGEST, a.getDigest());
 			values.put(ACTIVITY_C_TITLE, a.getTitleJSONString());
+			System.out.println("Inserting Activity: "+a.getActType());
 			db.insertOrThrow(ACTIVITY_TABLE, null, values);
 		}
 	}

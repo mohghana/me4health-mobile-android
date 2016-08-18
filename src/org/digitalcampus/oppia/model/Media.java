@@ -27,6 +27,7 @@ public class Media implements Serializable{
 	private String filename;
 	private String downloadUrl;
 	private String digest;
+	private Course course;
 	private int length;
 	private double fileSize;
 
@@ -81,6 +82,8 @@ public class Media implements Serializable{
     private boolean downloading;
     private int progress;
 
+	public Activity activity;
+
     public boolean isDownloading() {
         return downloading;
     }
@@ -90,5 +93,13 @@ public class Media implements Serializable{
 
     public int getProgress() { return progress; }
     public void setProgress(int progress) { this.progress = progress; }
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
 }
 

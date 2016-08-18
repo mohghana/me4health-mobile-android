@@ -184,6 +184,7 @@ public class SubmitTrackerMultipleTask extends AsyncTask<Payload, Integer, Paylo
 	@Override
     protected void onPostExecute(Payload p) {
 		synchronized (this) {
+			//System.out.println(p.getResultResponse());
             if (trackerServiceListener != null) {
             	trackerServiceListener.trackerComplete();
             }

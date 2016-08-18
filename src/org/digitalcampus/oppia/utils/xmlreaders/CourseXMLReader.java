@@ -54,6 +54,7 @@ public class CourseXMLReader {
     private CourseMediaXMLHandler mediaParseHandler;
     private File courseXML;
     private long courseId;
+	private DbHelper db;
 
     public CourseXMLReader(String filename, long courseId, Context ctx) throws InvalidXMLException{
         this.ctx = ctx;
@@ -85,7 +86,7 @@ public class CourseXMLReader {
                     SAXParserFactory parserFactory  = SAXParserFactory.newInstance();
                     SAXParser parser = parserFactory.newSAXParser();
                     reader = parser.getXMLReader();
-                    DbHelper db = new DbHelper(ctx);
+                    db = new DbHelper(ctx);
                     long userId = db.getUserId(prefs.getString(PrefsActivity.PREF_USER_NAME, ""));
                     completeParseHandler = new CourseXMLHandler(courseId, userId, db);
 
@@ -126,7 +127,8 @@ public class CourseXMLReader {
         else{
             if (courseXML.exists()) {
                 try {
-                    mediaParseHandler = new CourseMediaXMLHandler();
+                	db = new DbHelper(ctx);
+                    mediaParseHandler = new CourseMediaXMLHandler(db.getCourse(courseId, db.getUserId(prefs.getString(PrefsActivity.PREF_USER_NAME, ""))));
                     SAXParserFactory parserFactory  = SAXParserFactory.newInstance();
                     SAXParser parser = parserFactory.newSAXParser();
                     reader = parser.getXMLReader();

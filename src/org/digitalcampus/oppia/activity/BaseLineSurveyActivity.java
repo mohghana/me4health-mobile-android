@@ -120,14 +120,7 @@ public class BaseLineSurveyActivity extends AppActivity implements OnSharedPrefe
 				startActivity(i);
 		    } 
 		});
-		//pDialog.dismiss();
 		
-		/*pDialog.setButton("Close", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int id) {
-			
-			}
-		  });*/
-		//pDialog.dismiss();
 		
 	}
 

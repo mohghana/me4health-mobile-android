@@ -28,9 +28,11 @@ import org.digitalcampus.oppia.adapter.DownloadCourseListAdapter;
 import org.digitalcampus.oppia.application.DatabaseManager;
 import org.digitalcampus.oppia.application.DbHelper;
 import org.digitalcampus.oppia.application.MobileLearning;
+import org.digitalcampus.oppia.application.Tracker;
 import org.digitalcampus.oppia.listener.APIRequestListener;
 import org.digitalcampus.oppia.listener.CourseInstallerListener;
 import org.digitalcampus.oppia.listener.ListInnerBtnOnClickListener;
+import org.digitalcampus.oppia.model.Activity;
 import org.digitalcampus.oppia.model.Course;
 import org.digitalcampus.oppia.model.Lang;
 import org.digitalcampus.oppia.model.Tag;
@@ -39,6 +41,7 @@ import org.digitalcampus.oppia.service.InstallerBroadcastReceiver;
 import org.digitalcampus.oppia.task.APIRequestTask;
 import org.digitalcampus.oppia.task.Payload;
 import org.digitalcampus.oppia.utils.UIUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,6 +77,10 @@ public class DownloadActivity extends AppActivity implements APIRequestListener,
 
     private InstallerBroadcastReceiver receiver;
 
+	private DbHelper db;
+
+	private Tracker t;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,7 +91,8 @@ public class DownloadActivity extends AppActivity implements APIRequestListener,
             actionBar.setHomeButtonEnabled(true);
         }
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        
+        db=new DbHelper(this);
+        t=new Tracker(this);
 		Bundle bundle = this.getIntent().getExtras(); 
         if(bundle != null) {
         	Tag t = (Tag) bundle.getSerializable(Tag.TAG);
@@ -329,6 +337,20 @@ public class DownloadActivity extends AppActivity implements APIRequestListener,
             course.setInstalling(false);
             course.setDownloading(false);
             dla.notifyDataSetChanged();
+            Activity a=new Activity();
+			a.setActType("download");
+			a.setCompleted(true);
+			ArrayList<Activity> alist=new ArrayList<Activity>();
+			alist.add(a);
+			db.insertActivities(alist);
+			JSONObject data=new JSONObject();
+			try {
+				data.put("version", course.getVersionId());
+    			t.saveTracker(course.getCourseId(), "", data, true);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             AlertDialog.Builder builder = new AlertDialog.Builder(DownloadActivity.this);
             // Add the buttons
                builder.setMessage("Course download complete. Click ok to view course")

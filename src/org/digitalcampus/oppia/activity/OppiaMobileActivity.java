@@ -92,7 +92,8 @@ public class OppiaMobileActivity extends AppActivity implements OnSharedPreferen
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
         PreferenceManager.setDefaultValues(this, R.xml.prefs, false);
         prefs.registerOnSharedPreferenceChangeListener(this);
-
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
 		// set preferred lang to the default lang
 		if ("".equals(prefs.getString(PrefsActivity.PREF_LANGUAGE, ""))) {
 			Editor editor = prefs.edit();
@@ -253,6 +254,9 @@ public class OppiaMobileActivity extends AppActivity implements OnSharedPreferen
 			tb.putSerializable("langs", langs);
 			i.putExtras(tb);
 			startActivity(i);
+			return true;
+		}else if (itemId == android.R.id.home) {
+			this.finish();
 			return true;
 		} else if (itemId == R.id.menu_monitor) {
 			startActivity(new Intent(this, MonitorActivity.class));

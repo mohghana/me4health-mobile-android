@@ -32,6 +32,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class MobileLearning extends Application {
@@ -51,6 +52,7 @@ public class MobileLearning extends Application {
 	public static final String LOGIN_PATH = OPPIAMOBILE_API + "user/";
 	public static final String REGISTER_PATH = OPPIAMOBILE_API + "register/";
 	public static final String SURVEY_PATH = OPPIAMOBILE_API + "survey/";
+	public static final String IMEI_PATH = OPPIAMOBILE_API + "appdownload/";
 	public static final String RESET_PATH = OPPIAMOBILE_API + "reset/";
 	public static final String UPDATE_PROFILE_PATH = OPPIAMOBILE_API + "update_profile/";
 	public static final String QUIZ_SUBMIT_PATH = OPPIAMOBILE_API + "quizattempt/";
@@ -135,5 +137,13 @@ public class MobileLearning extends Application {
         FileUtils.setStorageStrategy(strategy);
 
     }
+    
+    public static String getDeviceImei(Context context){
+		String device_id = null;
+		TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		device_id = tm.getDeviceId();
+		return device_id;
+	}
+	
 
 }

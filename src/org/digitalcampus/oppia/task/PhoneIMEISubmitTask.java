@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
@@ -32,14 +30,10 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.digitalcampus.mobile.learningJHPIEGO.R;
 import org.digitalcampus.oppia.activity.PrefsActivity;
-import org.digitalcampus.oppia.application.DatabaseManager;
 import org.digitalcampus.oppia.application.DbHelper;
 import org.digitalcampus.oppia.application.MobileLearning;
 import org.digitalcampus.oppia.listener.SubmitListener;
-import org.digitalcampus.oppia.model.User;
 import org.digitalcampus.oppia.utils.HTTPConnectionUtils;
-import org.digitalcampus.oppia.utils.MetaDataUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,47 +44,46 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
-public class LoginTask extends AsyncTask<Payload, Object, Payload> {
+public class PhoneIMEISubmitTask extends AsyncTask<Payload, Object, Payload> {
 
-	public static final String TAG = LoginTask.class.getSimpleName();
+	public static final String TAG = SurveySubmitTask.class.getSimpleName();
 
 	private Context ctx;
 	private SharedPreferences prefs;
 	private SubmitListener mStateListener;
 
-	private ArrayList<User> userInfo;
-
 	private DbHelper db;
-	
-	public LoginTask(Context c) {
-		this.ctx = c;
+
+	private long userId;
+
+	public PhoneIMEISubmitTask(Context ctx) {
+		this.ctx = ctx;
 		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-	       
+		db=new DbHelper(this.ctx);
+		userId = db.getUserId(prefs.getString(PrefsActivity.PREF_USER_NAME, ""));
 	}
 
 	@Override
 	protected Payload doInBackground(Payload... params) {
 
 		Payload payload = params[0];
-		User u = (User) payload.getData().get(0);
 		HTTPConnectionUtils client = new HTTPConnectionUtils(ctx);
 
-		String url = prefs.getString(PrefsActivity.PREF_SERVER, ctx.getString(R.string.prefServerDefault)) + MobileLearning.LOGIN_PATH;
-		JSONObject json = new JSONObject();
+		String url = prefs.getString(PrefsActivity.PREF_SERVER, ctx.getString(R.string.prefServerDefault))
+				+ MobileLearning.IMEI_PATH;
 		
 		HttpPost httpPost = new HttpPost(url);
 		try {
 			// update progress dialog
-			publishProgress(ctx.getString(R.string.login_process));
+			publishProgress("Checking IMEI number");
 			// add post params
-			json.put("phone_number", u.getPhoneNo());
-            json.put("password", u.getPassword());
-            json.put("imei", MobileLearning.getDeviceImei(ctx));
-            System.out.println(json.toString());
-            StringEntity se = new StringEntity( json.toString(),"utf8");
+			JSONObject json = new JSONObject();
+			json.put("imei", MobileLearning.getDeviceImei(ctx));
+            json.put("username",prefs.getString(PrefsActivity.PREF_USER_NAME, ""));
+            StringEntity se = new StringEntity(json.toString(),"utf8");
             se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             httpPost.setEntity(se);
-
+            System.out.println(json.toString());
 			// make request
 			HttpResponse response = client.execute(httpPost);
 
@@ -103,67 +96,20 @@ public class LoginTask extends AsyncTask<Payload, Object, Payload> {
 			while ((s = buffer.readLine()) != null) {
 				responseStr += s;
 			}
-			System.out.println(response.getStatusLine().getStatusCode());
-			// check status code
+			System.out.println("Response: "+response.getStatusLine().getStatusCode());
 			switch (response.getStatusLine().getStatusCode()){
 				case 400: // unauthorised
 					payload.setResult(false);
-					payload.setResultResponse(ctx.getString(R.string.error_login));
+					payload.setResultResponse(responseStr);
 					break;
-				case 201: // logged in
-					JSONObject jsonResp = new JSONObject(responseStr);
-					u.setApiKey(jsonResp.getString("api_key"));
-					u.setPassword(u.getPassword());
-					u.setPasswordEncrypted();
-					u.setFirstname(jsonResp.getString("first_name"));
-					u.setLastname(jsonResp.getString("last_name"));
-					JSONArray sc=new JSONArray(jsonResp.getString("school_code"));
-					u.setSchoolCode(sc.getJSONObject(0).getString("school_code"));
-					JSONArray yg=new JSONArray(jsonResp.getString("year_group"));
-					u.setYeargroup(yg.getJSONObject(0).getString("year_group"));
-					JSONArray st=new JSONArray(jsonResp.getString("status"));
-					u.setStatus(st.getJSONObject(0).getString("status"));
-					JSONArray p=new JSONArray(jsonResp.getString("program"));
-					u.setProgram(p.getJSONObject(0).getString("program"));
-					JSONArray ht=new JSONArray(jsonResp.getString("home_town"));
-					u.setHometown(ht.getJSONObject(0).getString("home_town"));
-					try {
-						u.setPoints(jsonResp.getInt("points"));
-						u.setBadges(jsonResp.getInt("badges"));
-					} catch (JSONException e){
-						u.setPoints(0);
-						u.setBadges(0);
-					}
-					try {
-						u.setScoringEnabled(jsonResp.getBoolean("scoring"));
-						u.setBadgingEnabled(jsonResp.getBoolean("badging"));
-					} catch (JSONException e){
-						u.setScoringEnabled(true);
-						u.setBadgingEnabled(true);
-					}
-					try {
-						JSONObject metadata = jsonResp.getJSONObject("metadata");
-				        MetaDataUtils mu = new MetaDataUtils(ctx);
-				        mu.saveMetaData(metadata, prefs);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-					DbHelper db = new DbHelper(ctx);
-					long user_id=db.addOrUpdateUser(u);
-					if(jsonResp.getString("survey_status").contains("taken")){
-						db.updateSurvey(user_id, "taken");
-					}else{
-						db.updateSurvey(user_id, "");
-					}
-					DatabaseManager.getInstance().closeDatabase();
+				case 201: // survey submitted in
 					payload.setResult(true);
-					payload.setResultResponse(ctx.getString(R.string.login_complete));
+					payload.setResultResponse("IMEI saved");
 					break;
 				default:
 					payload.setResult(false);
 					payload.setResultResponse(ctx.getString(R.string.error_connection));
 			}
-			
 
 		} catch (UnsupportedEncodingException e) {
 			payload.setResult(false);
@@ -179,25 +125,22 @@ public class LoginTask extends AsyncTask<Payload, Object, Payload> {
 			e.printStackTrace();
 			payload.setResult(false);
 			payload.setResultResponse(ctx.getString(R.string.error_processing_response));
-		} finally {
-
-		}
+		} 
 		return payload;
 	}
 
 	@Override
 	protected void onPostExecute(Payload response) {
 		synchronized (this) {
-			System.out.println(response.getResultResponse());
-            if (mStateListener != null) {
-               mStateListener.submitComplete(response);
-            }
-        }
+			if (mStateListener != null) {
+				mStateListener.submitComplete(response);
+			}
+		}
 	}
-	
-	public void setLoginListener(SubmitListener srl) {
-        synchronized (this) {
-            mStateListener = srl;
-        }
-    }
+
+	public void setImeiSubmitListener(SubmitListener srl) {
+		synchronized (this) {
+			mStateListener = srl;
+		}
+	}
 }

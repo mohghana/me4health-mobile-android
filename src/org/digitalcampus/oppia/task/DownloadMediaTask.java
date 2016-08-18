@@ -26,14 +26,20 @@ import java.net.URL;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
 import org.digitalcampus.mobile.learningJHPIEGO.R;
 import org.digitalcampus.oppia.activity.PrefsActivity;
+import org.digitalcampus.oppia.application.DbHelper;
+import org.digitalcampus.oppia.application.Tracker;
 import org.digitalcampus.oppia.listener.DownloadMediaListener;
+import org.digitalcampus.oppia.model.Activity;
 import org.digitalcampus.oppia.model.DownloadProgress;
 import org.digitalcampus.oppia.model.Media;
 import org.digitalcampus.oppia.utils.storage.FileUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.splunk.mint.Mint;
 
@@ -48,10 +54,14 @@ public class DownloadMediaTask extends AsyncTask<Payload, DownloadProgress, Payl
 	private DownloadMediaListener mStateListener;
 	private Context ctx;
 	private SharedPreferences prefs;
+	private DbHelper db;
+	private Tracker t;
 	
 	public DownloadMediaTask(Context ctx) {
 		this.ctx = ctx;
 		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		db=new DbHelper(ctx);
+		t=new Tracker(ctx);
 	}
 	
 	@Override
@@ -126,10 +136,10 @@ public class DownloadMediaTask extends AsyncTask<Payload, DownloadProgress, Payl
                         payload.setResultResponse(ctx.getString(R.string.error_media_download));
                     } else {
                         payload.setResult(true);
+                        //record media download complete in tracker here
                         payload.setResultResponse(ctx.getString(R.string.success_media_download,m.getFilename()));
                     }
                 }
-
 			} catch (ClientProtocolException e1) { 
 				e1.printStackTrace(); 
 				payload.setResult(false);

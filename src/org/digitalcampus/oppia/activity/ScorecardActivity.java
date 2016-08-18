@@ -204,6 +204,9 @@ public class ScorecardActivity extends FragmentActivity implements ActionBar.Tab
 			i.putExtras(tb);
 			startActivity(i);
 			return true;
+		}else if (itemId == android.R.id.home) {
+			this.finish();
+			return true;
 		} else if (itemId == R.id.menu_monitor) {
 			startActivity(new Intent(this, MonitorActivity.class));
 			return true;

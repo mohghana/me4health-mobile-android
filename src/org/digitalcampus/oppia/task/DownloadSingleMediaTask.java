@@ -77,7 +77,6 @@ public class DownloadSingleMediaTask extends AsyncTask<Payload, String, Payload>
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
-			   
 		   });
 		   dialog.show();
 		  }
@@ -105,8 +104,6 @@ public class DownloadSingleMediaTask extends AsyncTask<Payload, String, Payload>
                     payload.setResultResponse(ctx.getString(R.string.error_insufficient_storage_available));
                 }
                 else{
-
-
                     FileOutputStream f = new FileOutputStream(file);
                     InputStream in = c.getInputStream();
 
@@ -149,7 +146,6 @@ public class DownloadSingleMediaTask extends AsyncTask<Payload, String, Payload>
                         payload.setResultResponse(ctx.getString(R.string.success_media_download,fileName));
                     }
                 }
-
 			} catch (ClientProtocolException e1) { 
 				e1.printStackTrace(); 
 				payload.setResult(false);

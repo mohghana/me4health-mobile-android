@@ -27,8 +27,11 @@ import java.util.ArrayList;
 
 import org.digitalcampus.mobile.learningJHPIEGO.R;
 import org.digitalcampus.oppia.adapter.DownloadMediaListAdapter;
+import org.digitalcampus.oppia.application.DbHelper;
+import org.digitalcampus.oppia.application.Tracker;
 import org.digitalcampus.oppia.listener.DownloadMediaListener;
 import org.digitalcampus.oppia.listener.ListInnerBtnOnClickListener;
+import org.digitalcampus.oppia.model.Activity;
 import org.digitalcampus.oppia.model.Course;
 import org.digitalcampus.oppia.model.Lang;
 import org.digitalcampus.oppia.model.Media;
@@ -36,6 +39,9 @@ import org.digitalcampus.oppia.service.DownloadBroadcastReceiver;
 import org.digitalcampus.oppia.service.DownloadService;
 import org.digitalcampus.oppia.utils.ConnectionUtils;
 import org.digitalcampus.oppia.utils.UIUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.splunk.mint.Mint;
 
@@ -65,6 +71,12 @@ public class DownloadMediaActivity extends AppActivity implements DownloadMediaL
     private ArrayList<Media> missingMedia;
 	private DownloadMediaListAdapter dmla;
     private DownloadBroadcastReceiver receiver;
+	private Activity activity;
+	private Course course;
+
+	private DbHelper db;
+
+	private Tracker t;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -74,10 +86,13 @@ public class DownloadMediaActivity extends AppActivity implements DownloadMediaL
 		getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
+        db=new DbHelper(this);
+        t=new Tracker(this);
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle != null) {
 			missingMedia = (ArrayList<Media>) bundle.getSerializable(DownloadMediaActivity.TAG);
+			activity = (Activity) bundle.getSerializable(Activity.TAG);
+			course =(Course) bundle.getSerializable(Course.TAG);
 		}
         else{
             missingMedia = new ArrayList<Media>();
@@ -194,7 +209,10 @@ public class DownloadMediaActivity extends AppActivity implements DownloadMediaL
 		} else if (itemId == R.id.menu_download) {
 			startActivity(new Intent(this, TagSelectActivity.class));
 			return true;
-		}  else if (itemId == R.id.menu_settings) {
+		} else if (itemId == android.R.id.home) {
+			this.finish();
+			return true;
+		} else if (itemId == R.id.menu_settings) {
 			Intent i = new Intent(this, PrefsActivity.class);
 			Bundle tb = new Bundle();
 			ArrayList<Lang> langs = new ArrayList<Lang>();
@@ -271,6 +289,33 @@ public class DownloadMediaActivity extends AppActivity implements DownloadMediaL
             Toast.makeText(this,  this.getString(R.string.download_complete), Toast.LENGTH_LONG).show();
             missingMedia.remove(mediaFile);
             dmla.notifyDataSetChanged();
+            Activity a=new Activity();
+			a.setActType("video_download");
+			a.setCompleted(true);
+			a.setDigest(mediaFile.getDigest());
+			JSONObject obj=new JSONObject();
+			JSONArray jsonArray = new JSONArray();
+			try {
+				obj.put("en", mediaFile.getFilename());
+				jsonArray.put(obj);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			a.setTitlesFromJSONString(jsonArray.toString());
+			ArrayList<Activity> alist=new ArrayList<Activity>();
+			alist.add(a);
+			db.insertActivities(alist);
+			JSONObject data=new JSONObject();
+			try {
+				data.put("digest", mediaFile.getDigest());
+				data.put("type", "video_download");
+    			data.put("title",mediaFile.getFilename());
+    			t.saveTracker(mediaFile.getCourse().getCourseId(), mediaFile.getDigest(), data, true);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     }
 

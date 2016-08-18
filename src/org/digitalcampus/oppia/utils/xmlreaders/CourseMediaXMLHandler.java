@@ -17,6 +17,7 @@
 
 package org.digitalcampus.oppia.utils.xmlreaders;
 
+import org.digitalcampus.oppia.model.Course;
 import org.digitalcampus.oppia.model.Media;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -37,12 +38,15 @@ public class CourseMediaXMLHandler extends DefaultLexicalHandler implements IMed
 
     private ArrayList<Media> courseMedia = new ArrayList<Media>();
     private boolean insideMediaTag = false;
+    private Course c;
     private Stack<String> parentElements = new Stack<String>();
 
     public ArrayList<Media> getCourseMedia() {
         return courseMedia;
     }
-
+    public CourseMediaXMLHandler(Course c){
+    	this.c=c;
+    }
     @Override
     public void startElement(String aUri, String aLocalName,String aQName, Attributes aAttributes) throws SAXException {
         chars.setLength(0);
@@ -52,6 +56,7 @@ public class CourseMediaXMLHandler extends DefaultLexicalHandler implements IMed
             mediaObject.setFilename(aAttributes.getValue(NODE_FILENAME));
             mediaObject.setDownloadUrl(aAttributes.getValue(NODE_DOWNLOAD_URL));
             mediaObject.setDigest(aAttributes.getValue(NODE_DIGEST));
+            mediaObject.setCourse(c);
             String mediaLength = aAttributes.getValue(NODE_LENGTH);
             String mediaFilesize = aAttributes.getValue(NODE_FILESIZE);
             mediaObject.setLength(mediaLength==null?0:Integer.parseInt(mediaLength));

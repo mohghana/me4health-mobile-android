@@ -93,7 +93,8 @@ public class OppiaMobileGroupActivity extends AppActivity implements OnSharedPre
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
         PreferenceManager.setDefaultValues(this, R.xml.prefs, false);
         prefs.registerOnSharedPreferenceChangeListener(this);
-
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
 		// set preferred lang to the default lang
 		if ("".equals(prefs.getString(PrefsActivity.PREF_LANGUAGE, ""))) {
 			Editor editor = prefs.edit();
@@ -111,6 +112,8 @@ public class OppiaMobileGroupActivity extends AppActivity implements OnSharedPre
         courseList = (ListView) findViewById(R.id.course_list);
         courseList.setAdapter(courseListAdapter);
         registerForContextMenu(courseList);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
 
         courseList.setOnItemClickListener(new OnItemClickListener() {
 
@@ -140,7 +143,6 @@ public class OppiaMobileGroupActivity extends AppActivity implements OnSharedPre
 	public void onResume(){
 		super.onResume();
 		this.updateReminders();
-
         receiver = new InstallerBroadcastReceiver();
         receiver.setCourseInstallerListener(this);
         IntentFilter broadcastFilter = new IntentFilter(CourseIntallerService.BROADCAST_ACTION);
@@ -158,9 +160,7 @@ public class OppiaMobileGroupActivity extends AppActivity implements OnSharedPre
 		DbHelper db = new DbHelper(this);
         courses.clear();
 		courses.addAll(db.getCourseTags());
-		
 		DatabaseManager.getInstance().closeDatabase();
-		
 		LinearLayout llLoading = (LinearLayout) this.findViewById(R.id.loading_courses);
 		llLoading.setVisibility(View.GONE);
 		LinearLayout llNone = (LinearLayout) this.findViewById(R.id.no_courses);
@@ -253,7 +253,10 @@ public class OppiaMobileGroupActivity extends AppActivity implements OnSharedPre
 			i.putExtras(tb);
 			startActivity(i);
 			return true;
-		} else if (itemId == R.id.menu_monitor) {
+		} else if (itemId == android.R.id.home) {
+			this.finish();
+			return true;
+		}else if (itemId == R.id.menu_monitor) {
 			startActivity(new Intent(this, MonitorActivity.class));
 			return true;
 		} else if (itemId == R.id.menu_scorecard) {
